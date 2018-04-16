@@ -404,6 +404,7 @@ namespace UnityEditor.ShaderGraph
                 property.displayName = string.Format("{0} ({1})", property.displayName, duplicateNumber);
             }
 
+            property.overrideReferenceName = property.displayName;
             m_Properties.Add(property);
             m_AddedProperties.Add(property);
         }
@@ -641,6 +642,9 @@ namespace UnityEditor.ShaderGraph
         {
             // have to deserialize 'globals' before nodes
             m_Properties = SerializationHelper.Deserialize<IShaderProperty>(m_SerializedProperties, GraphUtil.GetLegacyTypeRemapping());
+            foreach(var prop in m_Properties)
+                prop.overrideReferenceName = prop.displayName;
+
             var nodes = SerializationHelper.Deserialize<INode>(m_SerializableNodes, GraphUtil.GetLegacyTypeRemapping());
             m_Nodes = new List<AbstractMaterialNode>(nodes.Count);
             m_NodeDictionary = new Dictionary<Guid, INode>(nodes.Count);
